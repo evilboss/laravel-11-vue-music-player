@@ -32,3 +32,17 @@ npm install
 ```
 npm run dev
 ```
+
+## App screenshots
+### Mobile view
+![Mobile view](./public//mobile-view.png)
+
+### Desktop view
+![Desktop view](./public//desktop-view.png)
+
+### Login screen
+![Login screen](./public//login-screen.png)
+
+### Register screen
+
+![Register screen](./public//registration-screen.png)
