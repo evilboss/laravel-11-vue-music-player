@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('duration'); // Assuming duration is required
             $table->integer('durationInSeconds'); // Assuming durationInSeconds is required
             $table->timestamps();
-
         });
     }
 
