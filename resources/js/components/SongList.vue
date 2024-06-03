@@ -61,8 +61,6 @@
                         <i v-else class="fas fa-pause  text-black"></i>
                     </button>
 
-
-
                     <button @click="nextSong" class="mx-2">
                         <i class="fa-solid fa-forward-step w-8 h-8"></i>
                     </button>
@@ -80,56 +78,7 @@ export default {
     return {
       isLoading: false,
 
-      songs: [
-        {
-          id: 1,
-          title: 'Peaceful Piano Music',
-          artist: 'Relaxing Piano Music',
-          duration: '3:16',
-          durationInSeconds: 196,
-          image: imgSRC
-        },
-        {
-          id: 2,
-          title: 'Peaceful Guitar Music',
-          artist: 'Relaxing Guitar Music',
-          duration: '6:56',
-          durationInSeconds: 416,
-          image: 'https://picsum.photos/200/200'
-        },
-        {
-          id: 3,
-          title: 'Peaceful Trumpet Music',
-          artist: 'Relaxing Trumpet Music',
-          duration: '7:43',
-          durationInSeconds: 463,
-          image: 'https://picsum.photos/200/200'
-        },
-        {
-          id: 4,
-          title: 'Peaceful Drumbeat Music',
-          artist: 'Relaxing Drumbeat Music',
-          duration: '12:02',
-          durationInSeconds: 722,
-          image: 'https://picsum.photos/200/200'
-        },
-        {
-          id: 5,
-          title: 'Peaceful Violin Music',
-          artist: 'Relaxing Violin Music',
-          duration: '3:02',
-          durationInSeconds: 182,
-          image: 'https://picsum.photos/200/200'
-        },
-        {
-          id: 6,
-          title: 'Peaceful Tuba Music',
-          artist: 'Relaxing Tuba Music',
-          duration: '4:03',
-          durationInSeconds: 243,
-          image: 'https://picsum.photos/200/200'
-        }
-      ],
+      songs: [],
       currentSong: {
         id: 1,
         title: 'Peaceful Piano Music',
@@ -143,7 +92,47 @@ export default {
       isPlaying: false
     }
   },
+  created() {
+    // Fetch songs when the component is created
+    this.fetchSongs()
+  },
+
   methods: {
+    async fetchSongs() {
+      // Get the auth token from localStorage
+      const authToken = localStorage.getItem('auth_token')
+      if (!authToken) {
+        console.error('Auth token not found in localStorage.')
+        return
+      }
+
+      try {
+        // Make the API call to fetch songs
+        const response = await fetch('api/songs', {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          }
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch songs.')
+        }
+
+        // Parse the response JSON
+        const data = await response.json()
+
+        // Set the songs data
+        this.songs = data
+
+        // Set the current song to the first song if not already set
+        if (!this.currentSong && this.songs.length > 0) {
+          this.currentSong = this.songs[0]
+        }
+      } catch (error) {
+        console.error('Error fetching songs:', error)
+      }
+    },
+
     randomCoverArt() {
       // Generate a random number to prevent caching
       const randomNum = Math.floor(Math.random() * 1000)
